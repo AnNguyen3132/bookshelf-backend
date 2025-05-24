@@ -5,15 +5,11 @@ const Op = db.Sequelize.Op;
 // Create and Save a new Author
 exports.create = (req, res) => {
   // Validate request
-  if (req.body.firstName === undefined) {
+  if (req.body.firstName === undefined || req.body.firstName === "") {
     const error = new Error("First name cant be empty!");
     error.statusCode = 400;
     throw error;
-  } else if (req.body.middleName === undefined) {
-    const error = new Error("Middle name cant be empty!");
-    error.statusCode = 400;
-    throw error;
-  } else if (req.body.lastName === undefined) {
+  } else if (req.body.lastName === undefined || req.body.lastName === "") {
     const error = new Error("Last name cant be empty!");
     error.statusCode = 400;
     throw error;
@@ -72,8 +68,19 @@ exports.findOne = (req, res) => {
 
 // Update a Author by the id in the request
 exports.update = (req, res) => {
-  const id = req.params.id;
 
+  if (req.body.firstName === undefined || req.body.firstName === "") {
+    const error = new Error("First name cant be empty!");
+    error.statusCode = 400;
+    throw error;
+  } else if (req.body.lastName === undefined || req.body.lastName === "") {
+    const error = new Error("Last name cant be empty!");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const id = req.params.id;
+  
   Author.update(req.body, {
     where: { id: id },
   })
