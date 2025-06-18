@@ -28,61 +28,62 @@ exports.create = (req, res) => {
       link: req.body.link,
     }
   )
-    .then((data) => {
-      let id = data.id;
-      try{
-        if(genres){
-          genres.forEach(element => {
-            genre_book.create({
-              bookId:id,
-              genreId:element.id
-            })
+  .then((data) => {
+    let id = data.id;
+    if(genres){
+      genres.forEach(element => {
+        genre_book.create({
+          bookId:id,
+          genreId:element.id
+        })
+        .then()
+        .catch((err) => {
+          res.status(500).send({
+            message: err.message || "Error Creating Book Genre with id=" + id,
           });
-        }
-      }
-      catch(ex){
-        res.status(500).send({
-          message: ex.message || "Error Creating Book Genres with id=" + id,
-        });
-      }
-      try{
-        if(authors){
-          authors.forEach(element => {
-            author_book.create({
-              bookId:id,
-              authorId:element.id
-            })
+          return;
+        })
+      })
+    }
+    if(authors){
+      authors.forEach(element => {
+        author_book.create({
+          bookId:id,
+          authorId:element.id
+        })
+        .then()
+        .catch((err) => {
+          res.status(500).send({
+            message: err.message || "Error Creating Book Authors with id=" + id,
           });
-        }
-      }
-      catch(ex){
-        res.status(500).send({
-          message: ex.message || "Error Creating Book Authors with id=" + id,
-        });
-      }
-      try{
-        if(publishers){
-          publishers.forEach(element => {
-            publisher_book.create({
-              bookId:id,
-              publisherId:element.id
-            })
+          return;
+        })
+      })
+    }
+    if(publishers){
+      publishers.forEach(element => {
+        publisher_book.create({
+          bookId:id,
+          publisherId:element.id
+        })
+        .then()
+        .catch((err) => {
+          res.status(500).send({
+            message: err.message || "Error Creating Book Publishers with id=" + id,
           });
-        }
-      }
-      catch(ex){
-        res.status(500).send({
-          message: ex.message || "Error Creating Book Publishers with id=" + id,
-        });
-      }
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Book.",
-      });
+          return;
+        })
+      })
+    }
+    res.send(data);
+  })
+  .catch((err) => {
+    res.status(500).send({
+      message: err.message || "Something went wrong",
     });
+    return;
+  })
+
 };
 // Find all Created Books
 exports.findAll = (req, res) => {
